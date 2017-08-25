@@ -1,8 +1,3 @@
-
-# coding: utf-8
-
-# In[ ]:
-
 import synapsebridgehelpers
 import synapseclient
 import pandas as pd
@@ -33,4 +28,3 @@ def summaryTable(syn, projectId, columns = []):
         df = df.asDataFrame()
         df_main = pd.concat([df_main,df])
     return df_main
-
