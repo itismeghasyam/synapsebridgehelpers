@@ -20,26 +20,13 @@ def healthCodeRecords(df, returnType = 'series'):
     except:
         print('The given dataframe does not have a column by that name')    
         
-###########################################################################################
-
-def recordsVsHealthCodes(df):
-    """returns two lists 'nrecords' and 'nhealthcodes' which are number of records and
-    the corresponding number of healthCodes with that many records"""
-    try:
-        healthCodes = (df['healthCode'].value_counts())
-        countedHealthCodes = dict(Counter(healthCodes))
-        x,y = zip(*sorted(countedHealthCodes.items()))
-        return {'nrecords':x, 'nhealthcodes':y}
-    except:
-        print('The given dataframe does not have the column healthCodes')
-        
 ###########################################################################################        
         
 def plotRecordsVsHealthCodes(syn, table_id, nbins = 10, scale = 'linear'):
     """Plots the number of records vs the number of healthcodes that have that 
     many records"""
     try:
-        results = syn.tableQuery('SELECT * FROM ' + table_id)
+        results = syn.tableQuery('SELECT healthCode,recordId FROM ' + table_id)
         df =  results.asDataFrame()
         plt.figure(figsize = (16,9))
         df.groupby('healthCode')['recordId'].count().hist(bins = nbins)
@@ -62,14 +49,13 @@ def plotRecordDistribution(syn, table_id, timeline = 'M'):
     'month', 'date', 'year', given the date is of the form yyyy-mm-dd"""
     
     # Fetch the table from synapse
-    results = syn.tableQuery('SELECT * FROM ' + table_id)
+    results = syn.tableQuery('SELECT uploadDate FROM ' + table_id)
     df =  results.asDataFrame()
 
     try:
         # Get the uploadDates and make em' a dataframe
         uploadDate = pd.DataFrame()
-        datesDroppedNa = df['uploadDate'].dropna()
-        uploadDate['date'] = pd.to_datetime(datesDroppedNa)
+        uploadDate['date'] = pd.to_datetime(df['uploadDate'].dropna())
         uploadDate.index = uploadDate['date']
         uploadDate['score'] = 1 # one score to each upload
 
@@ -102,7 +88,7 @@ def plotRecordDistribution(syn, table_id, timeline = 'M'):
 
     except:
         print('Given table does not have column uploadDate')
-    
+
 ###########################################################################################
 
 # Number of records vs Days since enrollment
@@ -124,7 +110,7 @@ def plotRecordsVsDaysSinceEnrollment(syn,table_id,stepsize = 10):
         return delta.days 
     
     # Fetch the table from synapse
-    results = syn.tableQuery('SELECT * FROM ' + table_id)
+    results = syn.tableQuery('SELECT healthCode,uploadDate FROM ' + table_id)
     df =  results.asDataFrame()
     df = df.dropna(subset = ['uploadDate']) # Dropping those rows with NaN values in uploadDate
 
