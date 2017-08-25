@@ -16,6 +16,6 @@ Individuals are identified by healthCodes in bridge but can optionally be associ
 import synapseclient, synapsebridgehelpers
 syn = synapseclient.login()
 
-tables = synapsebridgehelpers.tableHelpers.get_tables(syn, 'syn3270406')
+tables = synapsebridgehelpers.get_tables(syn, 'syn3270406')
 idMap = synapsebridgehelpers.externalIds2healthCodes(syn, tables['table.id'])
 ```
