@@ -1,6 +1,6 @@
 import synapsebridgehelpers
        
-def filterTablesByActivity(tables, healthCodes = None):
+def filterTablesByActivity(syn, tables, healthCodes = None):
     """ Given a dataframe containing columns table.id and simpleName
     this function groups all tables according to their simpleNames while 
     filtering the tables that contain the given healthCodes. When no healthCodes 
