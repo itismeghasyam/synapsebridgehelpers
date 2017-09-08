@@ -41,7 +41,7 @@ def tableWithFileIds(syn,table_id, healthcodes=None):
     also has an option to filter table given a list of healthcodes """
     
     # Getting cols from current table id
-    cols = list(syn.getTableColumns(table_id))
+    cols = syn.getTableColumns(table_id) # Generator object
 
     # Finding column names in the current table that have FILEHANDLEIDs as their type
     cols_filehandleids = [col.name for col in cols if col.columnType == 'FILEHANDLEID']
@@ -55,6 +55,13 @@ def tableWithFileIds(syn,table_id, healthcodes=None):
 
     # Store the results as a dataframe
     df = results.asDataFrame()
+    cols = synapseclient.as_table_columns(df)
+
+    # Change the type of columns that are FILEHANDLEIDs as calculated before
+    for col in cols:
+        for element in cols_filehandleids:
+            if col.name == element['name']:
+                col.columnType = 'FILEHANDLEID'
 
     # Iterate for each element(column) that has columntype FILEHANDLEID 
     for element in cols_filehandleids:
