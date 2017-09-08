@@ -60,7 +60,7 @@ def tableWithFileIds(syn,table_id, healthcodes=None):
     # Change the type of columns that are FILEHANDLEIDs as calculated before
     for col in cols:
         for element in cols_filehandleids:
-            if col.name == element['name']:
+            if col.name == element:
                 col.columnType = 'FILEHANDLEID'
 
     # Iterate for each element(column) that has columntype FILEHANDLEID 
