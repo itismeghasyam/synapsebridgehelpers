@@ -55,7 +55,6 @@ def tableWithFileIds(syn,table_id, healthcodes=None):
 
     # Store the results as a dataframe
     df = results.asDataFrame()
-    cols = synapseclient.as_table_columns(df)
 
     # Iterate for each element(column) that has columntype FILEHANDLEID 
     for element in cols_filehandleids:
