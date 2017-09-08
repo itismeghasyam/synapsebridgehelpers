@@ -40,18 +40,18 @@ def transferTables(syn,sourceProjId, uploadProjId, extId_Str = '', simpleNameFil
         
         df_main = pd.concat(df_main)
         
-        # If different datatypes happen while merging tables this will change the column type in the resulting dataframe
-        # The following code sets it right and casts the data into its original form / form that syn.store would accept
-        # (for FILEHANDLEID type columns, the input needs to be an integer)
-        for col in cols:
-            if col.columnType == 'STRING': 
-                df_main[col.name] = [str(item) if item==item else '' for item in df_main[col.name]]
-            elif col.columnType == 'INTEGER':
-                df_main[col.name] = [int(item) if item==item else '' for item in df_main[col.name]]
-            elif col.columnType == 'FILEHANDLEID':
-                df_main[col.name] = [int(item) if (item!='' and item==item) else '' for item in df_main[col.name]]
-            else:
-                df_main[col.name] = [item if item==item else '' for item in df_main[col.name]]
+#         # If different datatypes happen while merging tables this will change the column type in the resulting dataframe
+#         # The following code sets it right and casts the data into its original form / form that syn.store would accept
+#         # (for FILEHANDLEID type columns, the input needs to be an integer)
+#         for col in cols:
+#             if col.columnType == 'STRING': 
+#                 df_main[col.name] = [str(item) if item==item else '' for item in df_main[col.name]]
+#             elif col.columnType == 'INTEGER':
+#                 df_main[col.name] = [int(item) if item==item else '' for item in df_main[col.name]]
+#             elif col.columnType == 'FILEHANDLEID':
+#                 df_main[col.name] = [int(item) if (item!='' and item==item) else '' for item in df_main[col.name]]
+#             else:
+#                 df_main[col.name] = [item if item==item else '' for item in df_main[col.name]]
         
         # Correcting the order of the columns while uploading
         df_main = df_main[[col.name for col in cols]]
@@ -61,4 +61,4 @@ def transferTables(syn,sourceProjId, uploadProjId, extId_Str = '', simpleNameFil
         schema = synapseclient.Schema(name=activity_, columns=cols, parent=uploadProjId)
         table = synapseclient.Table(schema, df_main)
         table = syn.store(table)
-        table = syn.setProvenance(table.schema.id , activity = synapseclient.activity.Activity(used = all_tables[activity_]))
+        table = syn.setProvenance(table.schema.id , activity = synapseclient.activity.Activity(used = tables_list[activity_]))
