@@ -19,13 +19,16 @@ def transferTables(syn,sourceProjId, uploadProjId, extId_Str = '', simpleNameFil
         healthCodeList = list(res['healthCode'])
         extId_Str = ''
 
-    tables_list = synapsebridgehelpers.filterTablesByActivity(syn,all_tables,healthCodes = healthCodeList)        
+    tables_list = synapsebridgehelpers.filterTablesByActivity(all_tables,healthCodes = healthCodeList)        
     
     # Iterate over each activity in tables_list
     for activity_ in tables_list:
         print(activity_)
-        
-        # Initializing list of all table ids corresponding to that activity 
+    
+        # list of all table ids corresponding to that activity 
+        activityTableIds = tables_list[activity_]
+
+        # Initializing list of all tables corresponding to that activity 
         df_main =[]
         
         # appending the sorted tables corresponding to that activity
