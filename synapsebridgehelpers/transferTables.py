@@ -13,9 +13,7 @@ def transferTables(syn,sourceProjId, uploadProjId, extId_Str = '', simpleNameFil
     
     # Converting the external IDs to healthcodes, as some people might have joined the clinical study later on
     if extId_Str != '':
-        all_tables_list = []
-        for activity in all_tables:
-            all_tables_list = all_tables_list + all_tables[activity]
+        all_tables_list = list(all_tables['table.id'])
         res = synapsebridgehelpers.externalIds2healthCodes(syn,all_tables_list)
         res = res[res['externalId'].str.contains(extId_Str)]
         healthCodeList = list(res['healthCode'])
@@ -61,4 +59,3 @@ def transferTables(syn,sourceProjId, uploadProjId, extId_Str = '', simpleNameFil
         table = synapseclient.Table(schema, df_main)
         table = syn.store(table)
         table = syn.setProvenance(table.schema.id , activity = synapseclient.activity.Activity(used = all_tables[activity_]))
-
