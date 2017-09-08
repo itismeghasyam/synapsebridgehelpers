@@ -19,7 +19,7 @@ def transferTables(syn,sourceProjId, uploadProjId, extId_Str = '', simpleNameFil
         healthCodeList = list(res['healthCode'])
         extId_Str = ''
 
-    tables_list = synapsebridgehelpers.filterTablesByActivity(all_tables,healthCodes = healthCodeList)        
+    tables_list = synapsebridgehelpers.filterTablesByActivity(syn,all_tables,healthCodes = healthCodeList)        
     
     # Iterate over each activity in tables_list
     for activity_ in tables_list:
