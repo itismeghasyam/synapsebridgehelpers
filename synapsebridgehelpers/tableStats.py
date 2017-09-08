@@ -10,7 +10,11 @@ from datetime import datetime
 ###########################################################################################
 
 def healthCodeRecords(df, returnType = 'series'):
-    """returns number of records per healthCode """
+    """returns number of records per healthCode 
+    
+    Arguments:
+    - df: a dataFrame containing the column healthCode
+    - returnType: default is pandas.series, any other input will return a dict"""
     try:
         sortedSeries = df['healthCode'].value_counts()        
         if returnType == 'series':
@@ -24,7 +28,13 @@ def healthCodeRecords(df, returnType = 'series'):
         
 def plotRecordsVsHealthCodes(df, nbins = 10, scale = 'linear'):
     """Plots the number of records vs the number of healthcodes that have that 
-    many records"""
+    many records
+    
+    Arguments:
+    - df: a dataFrame containing the columns recordId and healthCode
+    - nbins: number of bins in the histogram plot
+    - scale: 'linear' for linear scale axes, 'log' for log scale axes
+    """
     try:
         plt.figure(figsize = (16,9))
         df.groupby('healthCode')['recordId'].count().hist(bins = nbins)
@@ -46,7 +56,9 @@ def plotRecordDistribution(df, timeline = 'M'):
     """plots records distribution according to timeline specified, options include
     'month', 'date', 'year', given the date is of the form yyyy-mm-dd
     
-    Options for timeline include {'M':Month, 'W': Week, 'D':Day}
+    Arguments:
+    - df: a dataFrame containing the column 'uploadDate'
+    - timeline: the unit of time on the time axis {'M':Month, 'W': Week, 'D':Day}
     """
     
     try:
@@ -92,7 +104,12 @@ def plotRecordDistribution(df, timeline = 'M'):
 def plotRecordsVsDaysSinceEnrollment(df,stepsize = 10):
     
     """Plots the number of records vs days since enrollment, by normalizing the submissions per healthcode according
-    to the date they joined the study"""
+    to the date they joined the study
+    
+    Arguments:
+    - df: a dataFrame containing the columns 'healthCode' and 'uploadDate'
+    - stepsize: the number of days for each tick on the time axis
+    """
 
     # Number of days passed between two dates
     def daysPassed(beforeDate, afterDate):
