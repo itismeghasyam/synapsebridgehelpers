@@ -17,17 +17,15 @@ def summaryTable(syn, projectId, columns = []):
     - columns: list of columns we want in the summary table"""
     
     all_tables = synapsebridgehelpers.get_tables(syn, projectId)
-    df_main = pd.DataFrame()
-    columns_str = ''
-    for col in columns:
-        columns_str = columns_str+col+','
-    columns_str = columns_str[:-1] # removing the last ','
-    columns_str = '*' if columns_str == '' else columns_str # If empty then we need to choose all columns
+    df_list = []
+    columns_str = ','.join(columns)
+    columns_str = '*' if columns_str == '' else columns_str # If empty then we choose all columns
     for table_id in all_tables['table.id']:
-        df = syn.tableQuery('select ' +columns_str+' from '+ table_id)
+        df = syn.tableQuery('select %s from %s' %(columns_str,table_id))
         df = df.asDataFrame()
         schema = syn.get(table_id)
         df['originalTableName'] = [schema.name for count in range(0,df.shape[0])]
         df['originalTableId'] = [schema.id for count in range(0,df.shape[0])]
-        df_main = pd.concat([df_main,df])
+        df_list.append(df)
+    df_main = pd.concat(df_list)    
     return df_main
