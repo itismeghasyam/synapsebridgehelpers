@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 from synapseutils.copy import copyFileHandles
 
-def copyFileIds(syn,table_id,fileIds):
+def copyFileIdsInBatch(syn,table_id,fileIds):
     """Outputs a dict(map) of the given fileId list to the output of copyFileHandles
     Will drop nas in the input fileIds, returns an empty map if the column is
     NOT of type FILEHANDLEID"""
@@ -59,7 +59,7 @@ def tableWithFileIds(syn,table_id, healthcodes=None):
 
     # Iterate for each element(column) that has columntype FILEHANDLEID 
     for element in cols_filehandleids:
-        df[element] = df[element].map(copyFileIds(syn,table_id,df[element]))
+        df[element] = df[element].map(copyFileIdsInBatch(syn,table_id,df[element]))
         df[element] = [int(x) if x==x else '' for x in df[element]]
         
     return {'df' : df, 'cols' : cols}
